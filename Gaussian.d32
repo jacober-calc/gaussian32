@@ -1,0 +1,214 @@
+# STACK
+
+# REGS
+
+# FLAGS
+
+# SEED
+
+# MODE
+MTRIG: DEG
+MFMT: FIX 6
+FN= Z
+
+# EQUATION LIST
+EQNPTR: 0
+EQN
+EQNEND
+
+# PROGRAM
+PTR: 0
+PGM
+  LBL A
+  FS? 0
+  XEQ M
+  STO X
+  +/-
+  GTO X
+  LBL B
+  FS? 0
+  XEQ M
+  STO X
+  LBL X
+  2
+  SQRT
+  \div;
+  XEQ C
+  2
+  \div;
+  RCL X
+  STO Z
+  R\down;
+  CF 2
+  FS? 1
+  XEQ P
+  RTN
+  LBL C
+  1
+  XEQ T
+  FS? 2
+  GTO U
+  1
+  -
+  LBL U
+  +/-
+  RTN
+  LBL D
+  0
+  LBL T
+  CF 2
+  STO W
+  x<>y
+  STO Z
+  ABS
+  1.6
+  x<y?
+  GTO V
+  0
+  RCL Z
+  FN= Z
+  \integ;FN d V
+  2
+  \mul;
+  LBL Y
+  \pi;
+  SQRT
+  \div;
+  RTN
+  LBL V
+  SF 2
+  0
+  RCL Z
+  x\sqr;
+  +/-
+  e\powx;
+  FN= W
+  \integ;FN d V
+  XEQ Y
+  RCL Z
+  ENTER
+  ABS
+  \div;
+  \mul;
+  RCL W
+  LASTx
+  -
+  +
+  +/-
+  RTN
+  LBL Z
+  RCL V
+  x\sqr;
+  +/-
+  e\powx;
+  FS? 1
+  XEQ P
+  RTN
+  LBL W
+  x=0?
+  RTN
+  RCL V
+  LN
+  +/-
+  SQRT
+  1/x
+  RTN
+  RCL M
+  -
+  RCL S
+  \div;
+  STO X
+  RTN
+  LBL M
+  STO Y
+  RCL R
+  -
+  RCL S
+  \div;
+  STO X
+  RTN
+  LBL N
+  STO X
+  RCL S
+  \mul;
+  RCL R
+  +
+  STO Y
+  RTN
+  LBL E
+  SF 0
+  STO B
+  x<>y
+  STO A
+  RCL B
+  XEQ A
+  STO B
+  RCL A
+  XEQ A
+  STO A
+  RCL B
+  x<>y
+  -
+  RTN
+  LBL G
+  231
+  STO R
+  23
+  STO S
+  RTN
+  LBL H
+  231
+  STO R
+  23
+  STO S
+  RTN
+  LBL I
+  231
+  STO R
+  23
+  STO S
+  RTN
+  LBL J
+  0.245
+  STO R
+  0.035
+  STO S
+  RTN
+  LBL K
+  0.245
+  STO R
+  0.035
+  STO S
+  RTN
+  LBL L
+  0.245
+  STO R
+  0.035
+  STO S
+  RTN
+  LBL F
+  STO T
+  x<>y
+  FS? 1
+  XEQ Q
+  STO U
+  \mul;
+  ENTER
+  1
+  RCL U
+  -
+  RCL T
+  y\powx;
+  1
+  x<>y
+  -
+  RTN
+  LBL P
+  100
+  \mul;
+  RTN
+  LBL O
+  100
+  \div;
+  RTN
+PGMEND
