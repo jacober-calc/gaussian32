@@ -8,7 +8,7 @@ Consulting this **README.md** before use is highly recommended. The program is s
 
 ## Using the Statefile
 
-You can using this statefile to evalulate P(x), Q(x) using the normal distribution and complementary normal distribution functions. As well as erf(x) and erfc(x) using the error and complimentary error functions. There are also additional programs that can be used by the user to convert x-values and scaled z-values, evaluate ranges of x for P and Q.
+You can using this statefile to evalulate P(x), Q(x) using the normal distribution and complementary normal distribution functions. As well as erf(x) and erfc(x) using the error and complementary error functions. There are also additional programs that can be used by the user to convert x-values and scaled z-values, evaluate ranges of x for P and Q.
 
 This statefile is largely a ported version of the program given in the *[HP15C Advance Functions Handbook](https://literature.hpcalc.org/official/hp15c-afh-en.pdf)*, Section 2 Workign With Numeric Integration (pp 51-55). Throughout this README I will link the LBL programs to their respective parents in the Advanced Functions Handbook for reference.
 
@@ -28,7 +28,7 @@ The user can set either Flag 0 or Flag 1 based on preference. When these flags a
 
 ### Main User Programs
 
-The main user programs are **LBL A**, **LBL B**, **LBL C**, **LBL D**, **LBL E**, and **LBL F**. These are the programs which allow the user to evaluate normal/complimentary distribution, error/complimetnary functions, range (or difference) of normal x values, and the inverse error function.
+The main user programs are **LBL A**, **LBL B**, **LBL C**, **LBL D**, **LBL E**, and **LBL F**. These are the programs which allow the user to evaluate normal/complementary distribution, error/complimetnary functions, range (or difference) of normal x values, and the inverse error function.
 
 ### Conversion Programs
 
