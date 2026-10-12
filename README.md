@@ -1,3 +1,5 @@
+![Social Media Preview](assets/gaussian32_social_preview.png)
+
 # gaussian Statefile
 
 ## Install and Download
@@ -38,6 +40,8 @@ The conversion programs are **LBL M** and **LBL N** which convert values from x 
 
 A row of programs exist on the physical DM32 forming **LBL G-L** and these program spaces are designed to be storage programs for means and standard deviations of items of interest to the user. In this downloaded version **LBL G-I** are the mean and standard deviation for driving distance of male amateur golfers while **LBL J-L** are for batting averages in the MLB from 2000-2025. These values should be filled with values of interest to the user or those which would need to be recalled often.
 
+![Program map](assets/program_map.svg)
+
 ### Background Sub-routines
 
 Sub-routes which are used by **Main User Programs** are **LBL T-Z**. These programs are used throughout the program for various calculations.
@@ -52,13 +56,25 @@ The entire statefile uses variable **Registers S-Z** depending on which programs
 
 **LBL A** and **LBL B** calculate the left [P(x)] and right [Q(x)] "tail" of the normal distribution given a z-value (or x value if **Flag 0** is set). Before running this program the user needs to ensure that the mean value is inputted into **Register R** and that the standard deviation (SD) is inputted into **Register S** (the **Mean/SD Storage Programs** should be designed to automatically do this for ease-of-use). The value displayed is the y-value along the standard deviation curve. It is given in decimal form unless **Flag 1** is set in which case it is in percentage form.
 
+![Lower and upper tails](assets/normal_tails.svg)
+
+With both flags clear, `1 XEQ A` returns 0.841345 and `1 XEQ B` returns 0.158655. The two tails always add to 1.
+
 ### LBL C/D
 
 **LBL C** and **LBL D** calculate the compliementary error [erfc(x)] and error functions [erf(x)] given an x value by the user. There is no need to ensure values in **Register R** or **Register S** before running this program. The result is the value of y in the error function.
 
+![Error function and complementary error function](assets/erf_erfc.svg)
+
+For |x| ≤ 1.6 the program integrates e^(−v²) directly. Beyond that it switches to the Handbook's substitution integral, which keeps erfc accurate far out in the tail, where 1 − erf(x) would lose its significant digits.
+
 ### LBL E
 
 **LBL E** is the range or difference program. It takes two x-values (lowers value in **y-register** and higher value in **x-register**) and subtracts them to give an output based on the range along the normal distribution curve. The inputs are always in x-value format, never scaled z-values. The output is either decimal or percent if **Flag 1** is set.
+
+![Range with LBL E](assets/golf_range.svg)
+
+`XEQ G` stores the golf mean and SD; then `200 ENTER 260 XEQ E` returns 0.807465, the share of drives between 200 and 260 yards.
 
 ### LBL F
 
@@ -72,9 +88,15 @@ The entire statefile uses variable **Registers S-Z** depending on which programs
 - y-register= n*p (dec)
 - x-register= 1-(1-p)^n (dec)
 
+![At least one with LBL F](assets/at_least_one.svg)
+
+`XEQ J` and `SF 0`, then `0.300 XEQ B` returns p = 0.058042. With p in the y-register, `9 XEQ F` returns 0.416171: about a 42% chance that at least one of nine hitters bats .300 or better.
+
 ### LBL M/D
 
 **LBL M** is used to convert an x value to a scaled z-value. It requires that the mean is stored in **RegR** and the standard deviation in **RegS**. **LBL N** is the opposite of **LBL M** and converts z-values to x values and again requires that values be inputted in **RegR** and **RegS** before use.
+
+![Converting between x and z](assets/xz_scale.svg)
 
 ### LBL P/Q
 
@@ -97,6 +119,19 @@ In the *Advanced Functions Handbook* the following labels are used, there DM32 s
 - LBL 4 (LBL T)
 - LBL 5 (LBL U)
 - LBL 6 (LBL V)
+
+The error-function core (LBL T) chooses between the Handbook's two integrals:
+
+```mermaid
+flowchart TD
+    nIn["LBL C or LBL D: x"] --> nT["LBL T: store x in Z"]
+    nT --> nQ{"Is the absolute value of x above 1.6?"}
+    nQ -- "No" --> nZ["Integrate LBL Z from 0 to x<br/>times 2 / sqrt pi gives erf"]
+    nQ -- "Yes" --> nV["LBL V: integrate LBL W<br/>from 0 to e to the minus x squared"]
+    nV --> nC["Divide by sqrt pi gives erfc"]
+    nZ --> nOut["LBL C returns erfc, LBL D returns erf"]
+    nC --> nOut
+```
 
 In the HP15C Handbook, **Flag 1** is used however this has been changed to **Flag 3** for this statefile.
 
